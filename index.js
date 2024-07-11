@@ -18,21 +18,21 @@ import { performBotAction } from './utils.js';
 const token = process.env.TELEGRAM_TOKEN;
 
 // dev
-//const bot = new TelegramBot(token, { polling: true });
+const bot = new TelegramBot(token, { polling: true });
 
 // prod
-const url = 'https://split-teams-telegram-bot.onrender.com'; // Add this environment variable
+//const url = 'https://split-teams-telegram-bot.onrender.com'; // Add this environment variable
 
-const bot = new TelegramBot(token, { webHook: true });
+//const bot = new TelegramBot(token, { webHook: true });
 
-(async () => {
-  try {
-    await bot.setWebHook(`${url}/api/bot`);
-    console.log(`Webhook set to: ${url}/api/bot`);
-  } catch (error) {
-    console.error('Error setting webhook:', error);
-  }
-})();
+//(async () => {
+//  try {
+//    await bot.setWebHook(`${url}/api/bot`);
+//    console.log(`Webhook set to: ${url}/api/bot`);
+//  } catch (error) {
+//    console.error('Error setting webhook:', error);
+//  }
+//})();
 
 export const allPlayers = {
   'aleksey_10 (Oleksii)': {
@@ -251,17 +251,17 @@ Danyakrya (Даня Левченко) -- option_middle`
 const app = express();
 app.use(bodyParser.json());
 
-app.post('/api/bot', (req, res) => {
-  try {
-    console.log('Received request headers:', req.headers);
-    console.log('Received request body:', JSON.stringify(req.body, null, 2));
-    bot.processUpdate(req.body);
-    res.sendStatus(200);
-  } catch (error) {
-    console.error('Error processing update:', error);
-    res.sendStatus(500);
-  }
-});
+//app.post('/api/bot', (req, res) => {
+//  try {
+//    console.log('Received request headers:', req.headers);
+//    console.log('Received request body:', JSON.stringify(req.body, null, 2));
+//    bot.processUpdate(req.body);
+//    res.sendStatus(200);
+//  } catch (error) {
+//    console.error('Error processing update:', error);
+//    res.sendStatus(500);
+//  }
+//});
 
 app.get('/', (req, res) => {
   res.send('Telegram bot is running');
