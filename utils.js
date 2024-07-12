@@ -1,6 +1,10 @@
+/**
+ *
+ * @param {Pick<import("@prisma/client").User, 'firstName' | 'lastName' | 'username'>} user
+ */
 export function getUserName(user) {
-  const fullName = `${user.first_name}${
-    user.last_name ? ' ' + user.last_name : ''
+  const fullName = `${user.firstName}${
+    user.lastName ? ' ' + user.lastName : ''
   }`;
 
   const username = user.username ? `${user.username} (${fullName})` : fullName;

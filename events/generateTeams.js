@@ -1,20 +1,30 @@
-import { allPlayers, pollResults } from '../index.js';
-import { performBotAction } from '../utils.js';
+import { PrismaClient } from '@prisma/client';
+import { getUserName, performBotAction } from '../utils.js';
 
 /**
  *
  * @param {TelegramBot} bot
+ * @param {PrismaClient} prisma
  */
-export const onGenerateTeams = bot =>
-  bot.onText(/\/generateteams (\d+)/, (msg, [, numberOfTeams]) => {
+export const onGenerateTeams = (bot, prisma) =>
+  bot.onText(/\/generateteams (\d+)/, async (msg, [, numberOfTeams]) => {
     const chatId = msg.chat.id;
 
-    const people = Object.entries(pollResults[chatId])
-      .filter(([, option]) => option === 0)
-      .map(([username]) => username);
+    const { pollId } = await prisma.pollChatId.findFirstOrThrow({
+      where: { chatId },
+      orderBy: { createdAt: 'desc' },
+    });
+
+    const activePlayers = await prisma.pollResults.findMany({
+      where: { pollId },
+      select: { user: true },
+    });
 
     try {
-      const teams = generateBalancedTeams(people, numberOfTeams);
+      const teams = generateBalancedTeams(
+        activePlayers.map(({ user }) => user),
+        numberOfTeams
+      );
 
       teams.forEach((team, index) =>
         performBotAction(() =>
@@ -29,36 +39,18 @@ export const onGenerateTeams = bot =>
     }
   });
 
-function generateBalancedTeams(activePlayers, numberOfTeams) {
-  const players = [[], [], []];
-
-  Object.entries(allPlayers).forEach(([username, { level }]) =>
-    players[level].push(username)
-  );
-
-  console.log('🚀 ~ generateBalancedTeams ~ arr:', players);
-
+/**
+ *
+ * @param {import('@prisma/client').User[]} activePlayers
+ * @param {number} numberOfTeams
+ */
+function generateBalancedTeams(activePlayers = [], numberOfTeams = 2) {
+  console.log('🚀 ~ generateBalancedTeams ~ activePlayers:', activePlayers);
   // Initialize teams as empty arrays
   let teams = Array.from({ length: numberOfTeams }, () => []);
 
-  // Function to get strength category based on player name
-  const getCategoryIndex = (playerName, players) => {
-    for (let i = 0; i < players.length; i++) {
-      if (players[i].includes(playerName)) {
-        return i;
-      }
-    }
-    return 0; // Default to low-level if player is not found
-  };
-
-  // Filter active players and map each player to their strength category
-  const filteredPlayers = activePlayers.map(player => ({
-    player,
-    category: getCategoryIndex(player, players),
-  }));
-
   // Sort players by strength category
-  filteredPlayers.sort((a, b) => a.category - b.category);
+  activePlayers.sort((a, b) => a.level - b.level);
 
   // Shuffle players within each category
   const shuffleArray = array => {
@@ -68,9 +60,12 @@ function generateBalancedTeams(activePlayers, numberOfTeams) {
     }
   };
 
+  /**
+   * @type {import('@prisma/client').User[]}
+   */
   const categories = [[], [], []];
-  filteredPlayers.forEach(player => {
-    categories[player.category].push(player.player);
+  activePlayers.forEach(player => {
+    categories[player.level].push(player);
   });
 
   categories.forEach(category => shuffleArray(category));
@@ -81,7 +76,7 @@ function generateBalancedTeams(activePlayers, numberOfTeams) {
   // Distribute players to teams
   shuffledPlayers.forEach((player, index) => {
     teams[index % numberOfTeams].push(
-      '\n@' + player + ' level:' + (allPlayers[player]?.level || 0)
+      '\n@' + getUserName(player) + ' level:' + (player.level || 0)
     );
   });
 

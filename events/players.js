@@ -1,24 +1,32 @@
-import { pollResults } from "../index.js";
-import { performBotAction } from "../utils.js";
+import TelegramBot from 'node-telegram-bot-api';
+import { getUserName, performBotAction } from '../utils.js';
+import { PrismaClient } from '@prisma/client';
 
 /**
  *
  * @param {TelegramBot} bot
+ * @param {PrismaClient} prisma
  */
-export const onPlayers = (bot) =>
-  bot.onText(/\/players/, (msg) => {
+export const onPlayers = (bot, prisma) =>
+  bot.onText(/\/players/, async msg => {
     const chatId = msg.chat.id;
 
-    const usernames = Object.entries(pollResults[chatId] || {})
-      .filter(([_, value]) => value === 0)
-      .map(([name]) => name);
+    const { pollId } = await prisma.pollChatId.findFirstOrThrow({
+      where: { chatId },
+      orderBy: { createdAt: 'desc' },
+    });
+
+    const users = await prisma.pollResults.findMany({
+      where: { pollId },
+      select: { user: true },
+    });
 
     performBotAction(() =>
       bot.sendMessage(
         chatId,
-        `По останньому голосуванню ${
-          usernames.length
-        } плюсів: \n${usernames.join("\n")}`,
-      ),
+        `По останньому голосуванню ${users.length} плюсів: \n${users
+          .map(({ user }) => getUserName(user))
+          .join('\n')}`
+      )
     );
   });

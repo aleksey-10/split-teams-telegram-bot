@@ -1,41 +1,59 @@
-import { pollResults } from '../index.js';
 import fs from 'fs';
 import { performBotAction } from '../utils.js';
+import TelegramBot from 'node-telegram-bot-api';
+import { PrismaClient } from '@prisma/client';
 /**
  *
  * @param {TelegramBot} bot
+ * @param {PrismaClient} prisma
  */
-export const onCustomPlayer = bot =>
-  bot.onText(/\/customplayer (.+)/, (msg, [, name]) => {
+export const onCustomPlayer = (bot, prisma) =>
+  bot.onText(/\/customplayer (.+)/, async (msg, [, username]) => {
     const chatId = msg.chat.id;
 
-    if (!pollResults[chatId]) {
-      pollResults[chatId] = {};
+    const { pollId } = await prisma.pollChatId.findFirstOrThrow({
+      where: { chatId },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+
+    let user = await prisma.user.findFirst({
+      where: { username },
+    });
+
+    if (!user) {
+      user = await prisma.user.create({
+        data: { level: 0, username },
+      });
     }
 
-    const hasAlreadyJoined = pollResults[chatId][name] === 0;
+    const record = await prisma.pollResults.findFirst({
+      where: { AND: [{ userId: user.id }, { pollId }] },
+    });
 
-    pollResults[chatId][name] = hasAlreadyJoined ? 1 : 0;
+    const hasAlreadyJoined = record?.optionId === 0;
 
-    //const filename = `${chatId}.txt`; // Replace with your file name
-    //const dataToAppend = JSON.stringify(pollResults[chatId]); // Data to append
-
-    console.log('🚀 ~ bot.onText ~ pollResults:', pollResults);
-
-    //// Append data to a file
-    //fs.writeFile(filename, dataToAppend, 'utf8', err => {
-    //  if (err) {
-    //    console.error('Error appending data:', err);
-    //    return;
-    //  }
-    //  console.log('Data appended successfully!');
-    //});
+    if (record) {
+      await prisma.pollResults.update({
+        where: { id: record.id },
+        data: { optionId: hasAlreadyJoined ? 1 : 0 },
+      });
+    } else {
+      await prisma.pollResults.create({
+        data: {
+          user: { connect: { id: user.id } },
+          optionId: 0,
+          pollChatId: { connect: { pollId } },
+        },
+      });
+    }
 
     try {
       performBotAction(() =>
         bot.sendMessage(
           chatId,
-          `${name} ${
+          `${username} ${
             hasAlreadyJoined
               ? 'прибрано з наступної генерації ☝️'
               : 'буде врахований під час генерації команд ✅'

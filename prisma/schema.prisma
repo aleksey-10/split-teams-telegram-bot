@@ -1,0 +1,48 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             Int           @id @default(autoincrement())
+  telegramUserId Int?
+  username       String?       @unique
+  firstName      String?       @db.Char(36)
+  lastName       String?       @db.Char(36)
+  level          Int?
+  PollResults    PollResults[]
+
+  @@map("user")
+}
+
+model PollChatId {
+  id          Int           @id @default(autoincrement())
+  createdAt   DateTime      @default(now())
+  pollId      String        @unique
+  chatId      BigInt
+  PollResults PollResults[]
+
+  @@map("poll_chat_id")
+}
+
+model PollResults {
+  id         Int        @id @default(autoincrement())
+  userId     Int
+  optionId   Int?
+  pollId     String
+  user       User?      @relation(fields: [userId], references: [id])
+  pollChatId PollChatId @relation(fields: [pollId], references: [pollId])
+
+  @@index([userId], map: "userId")
+  @@map("poll_results")
+}

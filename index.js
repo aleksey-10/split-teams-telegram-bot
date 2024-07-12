@@ -11,9 +11,9 @@ import { onAll } from './events/all.js';
 import express from 'express';
 import bodyParser from 'body-parser';
 import { performBotAction } from './utils.js';
-//import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 
-//export const prisma = new PrismaClient();
+export const prisma = new PrismaClient();
 
 const token = process.env.TELEGRAM_TOKEN;
 
@@ -89,19 +89,7 @@ export const allPlayers = {
   Олег: {
     level: 2,
   },
-  Саня: {
-    level: 2,
-  },
-  Ярик: {
-    level: 1,
-  },
   'bomjkolydun (Степаша 🧐)': {
-    level: 2,
-  },
-  Artem: {
-    level: 2,
-  },
-  Олександр: {
     level: 2,
   },
   'Tretyak27 (Влад)': {
@@ -126,61 +114,26 @@ export const allPlayers = {
     level: 2,
   },
   Сёма: {
+    // manually add to the database
+    level: 2,
+  },
+  Саня: {
+    // manually add to the database
+    level: 2,
+  },
+  Ярик: {
+    // manually add to the database
+    level: 1,
+  },
+  Artem: {
+    // manually add to the database
+    level: 2,
+  },
+  Олександр: {
+    // manually add to the database
     level: 2,
   },
 };
-
-export const pollResults = {
-  '-1001930766161': {
-    'djsvej (DJ SVEJ)': 0,
-    'Prontik (Artem Prontenko)': 1,
-    'aleksey_10 (Oleksii)': 1,
-    'vesely4ak (whatislove)': 0,
-    'maksvatsiuk (Makc Vatsiuk)': 0,
-    Ярик: 0,
-    'Zxcsobachka (Zxc_sobachka🖤⌯)': 1,
-    'whoistwixy (bodya)': 1,
-    'sanyaluchdance58 (Сашка)': 1,
-    'DenysKulikov (Денис)': 0,
-    'ice_vb (Valeriy Bozhenko)': 1,
-    'nik01314 (Никита)': 0,
-    'voxat1488 (Вохa☠️)': 2,
-    Олександр: 1,
-    'omelchenkodmytrii (Дмитрій Омельченко)': 1,
-    'SnimaemSanechku (Саня)': 0,
-    'ellxc1wn (ㅤ)': 0,
-    'ShevchukArtur (Артур Шевчук)': 1,
-    'Bogdan Tsapenko': 0,
-    Олег: 0,
-    'traxxse (krisong)': 0,
-    Artem: 0,
-    'Danyakrya (Даня Левченко)': 1,
-    'bomjkolydun (Степаша 🧐)': 0,
-    'mk_nolimits (Макар)': 0,
-    'brs117 (Андрей)': 1,
-    Влад: 1,
-    'bibabobib (Timur)': 1,
-    Саенко: 0,
-    'ospayne (Макс)': 0,
-    'bytexs (🥷🏻)': 1,
-    '+1 ще хтось': 0,
-    'Дима Горб': 1,
-    'Apso110 (А)': 0,
-  },
-  '-4258926914': {
-    'aleksey_10 (Oleksii)': 0,
-    вася: 0,
-    Олег: 0,
-    Сашко: 0,
-    Тарас: 0,
-    Пітер: 0,
-  },
-};
-
-export const pollChatMap = new Map().set(
-  '5219974582928149086',
-  '-1001930766161'
-);
 
 //fs.readFile('5219974582928149086.txt', 'utf8', (err, data) => {
 //  if (err) {
@@ -200,53 +153,39 @@ export const pollChatMap = new Map().set(
 //  }
 //});
 
-[
-  onStart,
-  onCreatePoll,
-  onPollAnswer,
-  onSkill,
-  onCustomPlayer,
-  onGenerateTeams,
-  onPlayers,
-  onCallbackQuery,
-  onAll,
-].forEach(cb => cb(bot));
+async function main() {
+  [
+    onStart,
+    onCreatePoll,
+    onPollAnswer,
+    onSkill,
+    onCustomPlayer,
+    onGenerateTeams,
+    onPlayers,
+    onCallbackQuery,
+    onAll,
+  ].forEach(cb => cb(bot, prisma));
 
-bot.onText(/\/stop/, msg => {
-  const chatId = msg.chat.id;
+  bot.onText(/\/stop/, msg => {
+    const chatId = msg.chat.id;
 
-  performBotAction(() => bot.sendMessage(chatId, 'See you later 🫡'));
-});
+    performBotAction(() => bot.sendMessage(chatId, 'See you later 🫡'));
+  });
 
-bot.onText(/\/chatid/, msg => {
-  const chatId = msg.chat.id;
+  bot.onText(/\/chatid/, msg => {
+    const chatId = msg.chat.id;
 
-  performBotAction(() => bot.sendMessage(chatId, chatId));
-});
+    performBotAction(() => bot.sendMessage(chatId, chatId));
+  });
+}
 
-`aleksey_10 (Oleksii) -- option_middle
-whoistwixy (bodya) -- option_low
-nik01314 (Никита) -- option_middle
-voxat1488 (Вохa☠️) -- option_low
-Prontik (Artem Prontenko) -- option_middle
-djsvej (DJ SVEJ) -- option_middle
-traxxse (krisong) -- option_low
-maksvatsiuk (Makc Vatsiuk) -- option_low
-omelchenkodmitriy (Дмитрій Омельченко) -- option_middle
-ice_vb (Valeriy Bozhenko) -- option_low
-vesely4ak (whatislove) -- option_low
-mk_nolimits (Макар) -- option_low
-Apso110 (А) -- option_middle
-Apso110 (А) -- option_low
-Danyakrya (Даня Левченко) -- option_middle`
-  .split(/\n/)
-  .reduce((acc, current) => {
-    const [username, choise] = current.split(' -- ');
-
-    const levels = { option_low: 0, option_middle: 1, option_strong: 2 };
-
-    return { ...acc, [username]: { level: levels[choise] } };
-  }, {});
+main()
+  .catch(e => {
+    throw e;
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
+  });
 
 const app = express();
 app.use(bodyParser.json());

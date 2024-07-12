@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: split-teams-telegram-bot
+    env: node
+    plan: free
+    buildCommand: npm install && npx prisma generate
+    startCommand: npm start
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: split-teams
+          property: connectionString

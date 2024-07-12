@@ -1,38 +1,68 @@
 import TelegramBot from 'node-telegram-bot-api';
-import { pollResults, pollChatMap } from '../index.js';
-import { getUserName } from '../utils.js';
+import { PrismaClient } from '@prisma/client';
 
 /**
  *
  * @param {TelegramBot} bot
+ * @param {PrismaClient} prisma
  */
-export const onPollAnswer = bot =>
-  bot.on('poll_answer', pollAnswer => {
-    const { poll_id } = pollAnswer;
+export const onPollAnswer = (bot, prisma) =>
+  bot.on('poll_answer', async pollAnswer => {
+    const { poll_id, user: telegramUser } = pollAnswer;
 
-    const chatId = pollChatMap.get(poll_id);
+    // check if there is such user
+    let user = await prisma.user.findFirst({
+      where: {
+        OR: [
+          {
+            telegramUserId: pollAnswer.user.id,
+          },
+          {
+            username: telegramUser.username,
+          },
+        ],
+      },
+    });
 
-    const username = getUserName(pollAnswer.user);
-
-    const [selectedOption] = pollAnswer.option_ids;
-
-    if (!pollResults[chatId]) {
-      pollResults[chatId] = {};
+    // if no then create one
+    if (!user) {
+      user = await prisma.user.create({
+        data: {
+          firstName: telegramUser.first_name,
+          telegramUserId: telegramUser.id,
+          lastName: telegramUser.last_name,
+          level: 0,
+          username: telegramUser.username,
+        },
+      });
+    } else {
+      if (!user.telegramUserId && user.username) {
+        await prisma.user.update({
+          where: { username: user.username },
+          data: { telegramUserId: telegramUser.id },
+        });
+      }
     }
 
-    pollResults[chatId][username] = selectedOption;
+    const [optionId] = pollAnswer.option_ids;
 
-    console.log('🚀 ~ onPollAnswer:', { pollResults, pollAnswer });
+    // create or update a record in pollResults
+    let pollResult = await prisma.pollResults.findFirst({
+      where: { pollId: poll_id, userId: user.id },
+    });
 
-    //const filename = `${poll_id}.txt`; // Replace with your file name
-    //const dataToAppend = JSON.stringify(pollResults[poll_id]); // Data to append
-
-    // Append data to a file
-    //fs.writeFile(filename, dataToAppend, 'utf8', err => {
-    //  if (err) {
-    //    console.error('Error appending data:', err);
-    //    return;
-    //  }
-    //  console.log('Data appended successfully!');
-    //});
+    if (pollResult) {
+      await prisma.pollResults.update({
+        where: { id: pollResult.id },
+        data: { optionId },
+      });
+    } else {
+      await prisma.pollResults.create({
+        data: {
+          pollId: poll_id,
+          optionId,
+          userId: user.id,
+        },
+      });
+    }
   });

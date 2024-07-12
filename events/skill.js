@@ -1,6 +1,7 @@
-import { allPlayers } from '../index.js';
+import { PrismaClient } from '@prisma/client';
 import { getUserName, performBotAction } from '../utils.js';
 import fs from 'fs';
+import TelegramBot from 'node-telegram-bot-api';
 
 // Listen for /skill command
 
@@ -34,12 +35,18 @@ export const onSkill = bot =>
 /**
  *
  * @param {TelegramBot} bot
+ * @param {PrismaClient} prisma
  */
-export const onCallbackQuery = bot =>
-  bot.on('callback_query', callbackQuery => {
+export const onCallbackQuery = (bot, prisma) =>
+  bot.on('callback_query', async callbackQuery => {
     const message = callbackQuery.message;
     const choice = callbackQuery.data;
-    const username = getUserName(callbackQuery.from);
+    const telegramUser = callbackQuery.from;
+    const username = getUserName({
+      firstName: telegramUser.first_name,
+      lastName: telegramUser.last_name,
+      username: telegramUser.username,
+    });
 
     // Check if the callback query is from the same user who sent the original command
     let responseText;
@@ -60,21 +67,26 @@ export const onCallbackQuery = bot =>
 
     const levels = { option_low: 0, option_middle: 1, option_strong: 2 };
 
-    allPlayers[username] = { level: levels[choice] };
+    const user = await prisma.user.findFirst({
+      where: { telegramUserId: telegramUser.id },
+    });
 
-    console.log('🚀 ~ allPlayers:', allPlayers);
-
-    //const filename = 'data.txt'; // Replace with your file name
-    //const dataToAppend = `${username} -- ${choice}\n`; // Data to append
-
-    //// Append data to a file
-    //fs.appendFile(filename, dataToAppend, err => {
-    //  if (err) {
-    //    console.error('Error appending data:', err);
-    //    return;
-    //  }
-    //  console.log('Data appended successfully!');
-    //});
+    if (user) {
+      await prisma.user.update({
+        where: { id: user.id },
+        data: { level: levels[choice] },
+      });
+    } else {
+      await prisma.user.create({
+        data: {
+          firstName: telegramUser.first_name,
+          telegramUserId: telegramUser.id,
+          lastName: telegramUser.last_name,
+          level: levels[choice],
+          username: telegramUser.username,
+        },
+      });
+    }
 
     // Acknowledge the callback query to remove the loading state
     bot
