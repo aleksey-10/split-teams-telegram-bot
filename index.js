@@ -135,24 +135,6 @@ export const allPlayers = {
   },
 };
 
-//fs.readFile('5219974582928149086.txt', 'utf8', (err, data) => {
-//  if (err) {
-//    console.error(`Error reading data:`, err);
-//    return;
-//  }
-
-//  const parsedData = JSON.parse(data);
-
-//  if (parsedData) {
-//    pollResults['5219974582928149086'] = parsedData;
-//    console.log(
-//      '🚀 ~ fs.readFile ~ parsedData:',
-//      parsedData,
-//      Object.keys(parsedData).length
-//    );
-//  }
-//});
-
 async function main() {
   [
     onStart,

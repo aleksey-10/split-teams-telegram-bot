@@ -4,10 +4,12 @@
  */
 export function getUserName(user) {
   const fullName = `${user.firstName}${
-    user.lastName ? ' ' + user.lastName : ''
+    user.lastName?.trim() ? ' ' + user.lastName?.trim() : ''
   }`;
 
-  const username = user.username ? `${user.username} (${fullName})` : fullName;
+  const username = user.username
+    ? `${user.username} (${fullName?.trim()})`
+    : fullName?.trim();
 
   return username;
 }
