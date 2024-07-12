@@ -8,14 +8,12 @@ import TelegramBot from 'node-telegram-bot-api';
  * @param {PrismaClient} prisma
  */
 export const onCreatePoll = (bot, prisma) =>
-  bot.onText(/\/createpoll (.+)/, (msg, match) => {
+  bot.onText(/\/createpoll (.+)/, (msg, [,question]) => {
     const chatId = msg.chat.id;
-
-    const message = match[1];
 
     performBotAction(() =>
       bot
-        .sendPoll(chatId, message, ['+', '-'], {
+        .sendPoll(chatId, question, ['+', '-'], {
           is_anonymous: false,
         })
         .then(async ({ poll }) => {

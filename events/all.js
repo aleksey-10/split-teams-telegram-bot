@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import { getUserName, performBotAction } from '../utils.js';
+import TelegramBot from 'node-telegram-bot-api';
 
 /**
  *
@@ -10,18 +11,39 @@ export const onAll = (bot, prisma) =>
   bot.onText(/\/all/, async msg => {
     const chatId = msg.chat.id;
 
-    //const users = Object.entries(allPlayers)
-    //  .sort(([, a], [, b]) => a.level - b.level)
-    //  .map(([username, { level }]) => `${username} -- level: ${level}`);
+    const users = await prisma.user.findMany({ orderBy: { level: 'asc' } });
 
-    const users = await prisma.user.findMany();
+    /**
+     * @type {import('@prisma/client').User[][]}
+     */
+    const formattedUsers = users
+      .reduce((acc, user) => {
+        console.log('🚀 ~ formattedUsers ~ acc, user:', { acc, user });
+        if (!acc[user.level]) {
+          acc[user.level] = [];
+        }
+
+        acc[user.level].push(user);
+
+        return acc;
+      }, [])
+      .reverse();
 
     performBotAction(() =>
       bot.sendMessage(
         chatId,
-        `Всього відомо ${users.length} гравців: \n${users
-          .map(user => `${getUserName(user)} -- level ${user.level}`)
-          .join('\n')}`
+        `<strong><u>${users.length} гравців:</u></strong> \n${formattedUsers
+          .map((usersGroup, index, list) => {
+            return `\n<strong>level ${list.length - index - 1} (${
+              usersGroup.length
+            } гравців)</strong>${usersGroup
+              .map(user => `\n- ${getUserName(user)}`)
+              .join('')}`;
+          })
+          .join('\n')}`,
+        {
+          parse_mode: 'HTML',
+        }
       )
     );
   });

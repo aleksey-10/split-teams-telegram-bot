@@ -1,5 +1,8 @@
 import { PrismaClient } from '@prisma/client';
 import { getUserName, performBotAction } from '../utils.js';
+import TelegramBot from 'node-telegram-bot-api';
+
+const colors = ['🔴', '🟢', '🔵', '🟡', '⚪️', '⚫️'];
 
 /**
  *
@@ -7,7 +10,7 @@ import { getUserName, performBotAction } from '../utils.js';
  * @param {PrismaClient} prisma
  */
 export const onGenerateTeams = (bot, prisma) =>
-  bot.onText(/\/generateteams (\d+)/, async (msg, [, numberOfTeams]) => {
+  bot.onText(/\/generateteams\s*(\d+)?/, async (msg, [, numberOfTeams = 2]) => {
     const chatId = msg.chat.id;
 
     const { pollId } = await prisma.pollChatId.findFirstOrThrow({
@@ -25,13 +28,21 @@ export const onGenerateTeams = (bot, prisma) =>
         activePlayers.map(({ user }) => user),
         numberOfTeams
       );
+      console.log('🚀 ~ bot.onText ~ teams:', teams);
 
-      teams.forEach((team, index) =>
-        performBotAction(() =>
-          bot.sendMessage(
-            chatId,
-            `Team ${index + 1} (кількість ${team.length}): ${team.join(', ')}`
-          )
+      performBotAction(() =>
+        bot.sendMessage(
+          chatId,
+          teams
+            .map((team, index) => {
+              const color = colors[index % colors.length];
+
+              return `<strong>${color} Team ${index + 1}</strong> (кількість ${
+                team.length
+              }):${team.join(', ')}`;
+            })
+            .join('\n\n'),
+          { parse_mode: 'HTML' }
         )
       );
     } catch (e) {

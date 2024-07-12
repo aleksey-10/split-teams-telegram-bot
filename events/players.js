@@ -24,9 +24,12 @@ export const onPlayers = (bot, prisma) =>
     performBotAction(() =>
       bot.sendMessage(
         chatId,
-        `По останньому голосуванню ${users.length} плюсів: \n${users
-          .map(({ user }) => getUserName(user))
-          .join('\n')}`
+        `<strong><u>По останньому голосуванню ${
+          users.length
+        } плюсів:</u></strong> \n${users
+          .map(({ user }) => `- ${getUserName(user)}`)
+          .join('\n')}`,
+        { parse_mode: 'HTML' }
       )
     );
   });
