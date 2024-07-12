@@ -44,7 +44,7 @@ export const onPollAnswer = (bot, prisma) =>
       }
     }
 
-    const [optionId] = pollAnswer.option_ids;
+    const [optionId = -1] = pollAnswer.option_ids;
 
     // create or update a record in pollResults
     let pollResult = await prisma.pollResults.findFirst({
