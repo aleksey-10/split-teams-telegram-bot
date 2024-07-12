@@ -17,7 +17,7 @@ export const onPlayers = (bot, prisma) =>
     });
 
     const users = await prisma.pollResults.findMany({
-      where: { pollId },
+      where: { pollId, optionId: 0 },
       select: { user: true },
     });
 

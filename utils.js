@@ -3,7 +3,7 @@
  * @param {Pick<import("@prisma/client").User, 'firstName' | 'lastName' | 'username'>} user
  */
 export function getUserName(user) {
-  const fullName = `${user.firstName}${
+  const fullName = `${user.firstName?.trim()}${
     user.lastName?.trim() ? ' ' + user.lastName?.trim() : ''
   }`;
 
