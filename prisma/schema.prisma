@@ -15,7 +15,7 @@ datasource db {
 
 model User {
   id             Int           @id @default(autoincrement())
-  telegramUserId Int?
+  telegramUserId BigInt?
   username       String?       @unique
   firstName      String?       @db.Char(36)
   lastName       String?       @db.Char(36)
