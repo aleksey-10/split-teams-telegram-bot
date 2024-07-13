@@ -1,5 +1,6 @@
 import TelegramBot from 'node-telegram-bot-api';
 import { PrismaClient } from '@prisma/client';
+import { upsertUserChat } from '../utils.js';
 
 /**
  *
@@ -65,4 +66,9 @@ export const onPollAnswer = (bot, prisma) =>
         },
       });
     }
+
+    const { chatId } = await prisma.pollChatId.findFirstOrThrow({ where: { pollId: poll_id }});
+    console.log("🚀 ~ chatId:", chatId)
+
+    upsertUserChat(prisma, { chatId, userId: user.id });
   });

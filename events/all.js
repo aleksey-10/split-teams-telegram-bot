@@ -11,7 +11,11 @@ export const onAll = (bot, prisma) =>
   bot.onText(/\/all/, async msg => {
     const chatId = msg.chat.id;
 
-    const users = await prisma.user.findMany({ orderBy: { level: 'asc' } });
+    const users = await prisma.user.findMany({
+      where: { UserChat: { some: { chatId } } },
+      orderBy: { level: 'asc' },
+    });
+    console.log("🚀 ~ users:", users)
 
     /**
      * @type {import('@prisma/client').User[][]}

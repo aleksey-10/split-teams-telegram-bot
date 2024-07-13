@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import { getUserName, performBotAction } from '../utils.js';
+import { getUserName, performBotAction, upsertUserChat } from '../utils.js';
 import fs from 'fs';
 import TelegramBot from 'node-telegram-bot-api';
 
@@ -88,12 +88,16 @@ export const onCallbackQuery = (bot, prisma) =>
       });
     }
 
+    const chatId = message.chat.id;
+
+    upsertUserChat(prisma, { chatId, userId: user.id });
+
     // Acknowledge the callback query to remove the loading state
     bot
       .answerCallbackQuery(callbackQuery.id)
       .then(() => {
         // Send a message based on the choice
-        performBotAction(() => bot.sendMessage(message.chat.id, responseText));
+        performBotAction(() => bot.sendMessage(chatId, responseText));
       })
       .catch(error => {
         console.error('Error in answerCallbackQuery:', error);

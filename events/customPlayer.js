@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { performBotAction } from '../utils.js';
+import { performBotAction, upsertUserChat } from '../utils.js';
 import TelegramBot from 'node-telegram-bot-api';
 import { PrismaClient } from '@prisma/client';
 /**
@@ -27,6 +27,8 @@ export const onCustomPlayer = (bot, prisma) =>
         data: { level: 0, username },
       });
     }
+
+    upsertUserChat(prisma, { chatId, userId: user.id });
 
     const record = await prisma.pollResults.findFirst({
       where: { AND: [{ userId: user.id }, { pollId }] },
