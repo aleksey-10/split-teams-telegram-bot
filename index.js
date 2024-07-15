@@ -12,6 +12,8 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import { performBotAction } from './utils.js';
 import { PrismaClient } from '@prisma/client';
+import shutdowns from './shutdowns/index.js';
+shutdowns();
 
 export const prisma = new PrismaClient();
 
@@ -34,106 +36,6 @@ const bot = new TelegramBot(token, { polling: true });
 //  }
 //})();
 
-export const allPlayers = {
-  'aleksey_10 (Oleksii)': {
-    level: 2,
-  },
-  'whoistwixy (bodya)': {
-    level: 1,
-  },
-  'nik01314 (Никита)': {
-    level: 2,
-  },
-  'voxat1488 (Вохa☠️)': {
-    level: 2,
-  },
-  'Prontik (Artem Prontenko)': {
-    level: 1,
-  },
-  'djsvej (DJ SVEJ)': {
-    level: 1,
-  },
-  'traxxse (krisong)': {
-    level: 0,
-  },
-  'maksvatsiuk (Makc Vatsiuk)': {
-    level: 0,
-  },
-  'omelchenkodmitriy (Дмитрій Омельченко)': {
-    level: 1,
-  },
-  'ice_vb (Valeriy Bozhenko)': {
-    level: 2,
-  },
-  'vesely4ak (whatislove)': {
-    level: 0,
-  },
-  'mk_nolimits (Макар)': {
-    level: 0,
-  },
-  'Apso110 (А)': {
-    level: 2,
-  },
-  'Danyakrya (Даня Левченко)': {
-    level: 1,
-  },
-  'sanyaluchdance58 (Сашка)': {
-    level: 1,
-  },
-  Влад: {
-    level: 0,
-  },
-  'envoyeed (Андрей)': {
-    level: 0,
-  },
-  Олег: {
-    level: 2,
-  },
-  'bomjkolydun (Степаша 🧐)': {
-    level: 2,
-  },
-  'Tretyak27 (Влад)': {
-    level: 1,
-  },
-  'SnimaemSanechku (Саня)': {
-    level: 1,
-  },
-  'brs117 (Андрей)': {
-    level: 0,
-  },
-  'bytexs (🥷🏻)': {
-    level: 1,
-  },
-  'ospayne (Макс)': {
-    level: 0,
-  },
-  'vitaliy9386 (Виталий)': {
-    level: 2,
-  },
-  'Dimtet (Дім)': {
-    level: 2,
-  },
-  Сёма: {
-    // manually add to the database
-    level: 2,
-  },
-  Саня: {
-    // manually add to the database
-    level: 2,
-  },
-  Ярик: {
-    // manually add to the database
-    level: 1,
-  },
-  Artem: {
-    // manually add to the database
-    level: 2,
-  },
-  Олександр: {
-    // manually add to the database
-    level: 2,
-  },
-};
 
 async function main() {
   [
