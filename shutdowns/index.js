@@ -239,8 +239,9 @@ export default () => {
     //  return shutdownsBot.sendMessage(chatId, 'Підпишіться на свою групу');
     //}
 
-    const day = new Date().getDay() - 1;
-    const hour = new Date().getHours();
+    const today = getDateInTimeZone('Europe/Kyiv');
+    const day = today.getDay() - 1;
+    const hour = today.getHours();
 
     const currentValue = schedule[day][hour];
 
@@ -320,4 +321,12 @@ function findNextValue(day, hour, key) {
   }
 
   return nextValue;
+}
+
+// Function to create a Date object in a specific time zone
+function getDateInTimeZone(timeZone) {
+  // Get the current date and time in the specified time zone
+  const now = new Date();
+  const localTime = now.toLocaleString('en-US', { timeZone: timeZone });
+  return new Date(localTime);
 }
