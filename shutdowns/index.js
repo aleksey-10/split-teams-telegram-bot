@@ -240,7 +240,7 @@ export default () => {
     //}
 
     const today = getDateInTimeZone('Europe/Kyiv');
-    const day = today.getDay() - 1;
+    const day = (today.getDay() || 7) - 1;
     const hour = today.getHours();
 
     const currentValue = schedule[day][hour];
@@ -319,7 +319,6 @@ function findNextValue(day, hour, key) {
       hour,
     });
   }
-
   return nextValue;
 }
 
