@@ -303,7 +303,7 @@ function findNextValue(day, hour, key) {
   while (nextValue === -1) {
     targetDay++;
 
-    if (targetDay > schedule.length) {
+    if (targetDay >= schedule.length) {
       targetDay = 0;
     }
 
@@ -312,13 +312,6 @@ function findNextValue(day, hour, key) {
     );
   }
 
-  if (key === 'possible') {
-    console.log('🚀 ~ findNextValue ~ targetDay:', {
-      targetDay,
-      nextValue,
-      hour,
-    });
-  }
   return nextValue;
 }
 
