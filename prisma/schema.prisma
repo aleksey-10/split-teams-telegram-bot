@@ -41,7 +41,7 @@ model PollResults {
   userId     Int
   optionId   Int?
   pollId     String
-  user       User?      @relation(fields: [userId], references: [id])
+  user       User?      @relation(fields: [userId], references: [id], onDelete: Cascade)
   pollChatId PollChatId @relation(fields: [pollId], references: [pollId], onDelete: Cascade)
 
   @@index([userId], map: "userId")
@@ -52,7 +52,7 @@ model UserChats {
   id     Int    @id @default(autoincrement())
   userId Int
   chatId BigInt
-  user   User?  @relation(fields: [userId], references: [id])
+  user   User?  @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("user_chat")
 }
