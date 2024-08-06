@@ -9,8 +9,8 @@ const colors = ['🔴', '🟢', '🔵', '🟡', '⚪️', '⚫️'];
  * @param {TelegramBot} bot
  * @param {PrismaClient} prisma
  */
-export const onGenerateTeams = (bot, prisma) =>
-  bot.onText(/\/generateteams\s*(\d+)?/, async (msg, [, numberOfTeams = 2]) => {
+export const onGo = (bot, prisma) =>
+  bot.onText(/\/go\s*(\d+)?/, async (msg, [, numberOfTeams = 2]) => {
     const chatId = msg.chat.id;
 
     const { pollId } = await prisma.pollChatId.findFirstOrThrow({

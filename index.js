@@ -1,11 +1,11 @@
 import 'dotenv/config';
 import TelegramBot from 'node-telegram-bot-api';
 import { onStart } from './events/start.js';
-import { onCreatePoll } from './events/createPoll.js';
+import { onCreatePoll } from './events/poll.js';
 import { onPollAnswer } from './events/pollAnswer.js';
 import { onCallbackQuery, onSkill } from './events/skill.js';
-import { onCustomPlayer } from './events/customPlayer.js';
-import { onGenerateTeams } from './events/generateTeams.js';
+import { onAdd } from './events/add.js';
+import { onGo } from './events/go.js';
 import { onPlayers } from './events/players.js';
 import { onAll } from './events/all.js';
 import express from 'express';
@@ -43,8 +43,8 @@ async function main() {
     onCreatePoll,
     onPollAnswer,
     onSkill,
-    onCustomPlayer,
-    onGenerateTeams,
+    onAdd,
+    onGo,
     onPlayers,
     onCallbackQuery,
     onAll,

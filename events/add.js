@@ -1,4 +1,3 @@
-import fs from 'fs';
 import { performBotAction, upsertUserChat } from '../utils.js';
 import TelegramBot from 'node-telegram-bot-api';
 import { PrismaClient } from '@prisma/client';
@@ -7,8 +6,8 @@ import { PrismaClient } from '@prisma/client';
  * @param {TelegramBot} bot
  * @param {PrismaClient} prisma
  */
-export const onCustomPlayer = (bot, prisma) =>
-  bot.onText(/\/customplayer (.+)/, async (msg, [, username]) => {
+export const onAdd = (bot, prisma) =>
+  bot.onText(/\/add (.+)/, async (msg, [, username]) => {
     const chatId = msg.chat.id;
 
     const { pollId } = await prisma.pollChatId.findFirstOrThrow({
