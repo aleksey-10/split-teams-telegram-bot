@@ -17,15 +17,6 @@ const schedule = [
   // Monday
   [
     'off',
-    'possible',
-    'possible',
-    'possible',
-    'on',
-    'on',
-
-    'off',
-    'off',
-    'off',
     'off',
     'possible',
     'possible',
@@ -41,10 +32,20 @@ const schedule = [
     'possible',
     'possible',
     'on',
+    'on',
+
+    'off',
+    'off',
+    'off',
+    'off',
+    'possible',
+    'possible',
+    'possible',
     'on',
   ],
   // Tuesday
   [
+    'on',
     'off',
     'off',
     'off',
@@ -69,21 +70,11 @@ const schedule = [
     'off',
     'off',
     'off',
-    'possible',
     'possible',
   ],
   // Wednesday
   [
     'possible',
-    'on',
-    'on',
-
-    'off',
-    'off',
-    'off',
-    'off',
-    'possible',
-    'possible',
     'possible',
     'on',
     'on',
@@ -99,21 +90,21 @@ const schedule = [
     'on',
 
     'off',
+    'off',
+    'off',
+    'off',
+    'possible',
+    'possible',
+    'possible',
+    'on',
+    'on',
+
     'off',
     'off',
   ],
   // Thursday
   [
     'off',
-    'possible',
-    'possible',
-    'possible',
-    'on',
-    'on',
-
-    'off',
-    'off',
-    'off',
     'off',
     'possible',
     'possible',
@@ -129,10 +120,20 @@ const schedule = [
     'possible',
     'possible',
     'on',
+    'on',
+
+    'off',
+    'off',
+    'off',
+    'off',
+    'possible',
+    'possible',
+    'possible',
     'on',
   ],
   //Friday
   [
+    'on',
     'off',
     'off',
     'off',
@@ -157,21 +158,11 @@ const schedule = [
     'off',
     'off',
     'off',
-    'possible',
     'possible',
   ],
   // Saturday
   [
     'possible',
-    'on',
-    'on',
-
-    'off',
-    'off',
-    'off',
-    'off',
-    'possible',
-    'possible',
     'possible',
     'on',
     'on',
@@ -187,6 +178,15 @@ const schedule = [
     'on',
 
     'off',
+    'off',
+    'off',
+    'off',
+    'possible',
+    'possible',
+    'possible',
+    'on',
+    'on',
+
     'off',
     'off',
   ],
@@ -195,6 +195,14 @@ const schedule = [
     'off',
     'possible',
     'possible',
+    'on',
+    'on',
+
+    'off',
+    'off',
+    'off',
+    'off',
+    'possible',
     'possible',
     'on',
     'on',
@@ -211,13 +219,6 @@ const schedule = [
 
     'off',
     'off',
-    'off',
-    'off',
-    'possible',
-    'possible',
-    'possible',
-    'on',
-    'on',
   ],
 ];
 
