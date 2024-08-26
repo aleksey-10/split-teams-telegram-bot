@@ -10,6 +10,7 @@ const shutdownsBot = new TelegramBot(token, { polling: true });
  */
 //const userSubscriptions = {};
 
+
 /**
  * @type {('possible' | 'off' | 'on' )[][]}
  */
@@ -17,7 +18,6 @@ const group5Schedule = [
   // Monday
   [
     'off',
-    'off',
     'possible',
     'possible',
     'possible',
@@ -41,11 +41,11 @@ const group5Schedule = [
     'possible',
     'possible',
     'possible',
+    'on',
     'on',
   ],
   // Tuesday
   [
-    'on',
     'off',
     'off',
     'off',
@@ -70,12 +70,12 @@ const group5Schedule = [
     'off',
     'off',
     'off',
+    'possible',
     'possible',
   ],
   // Wednesday
   [
     'possible',
-    'possible',
     'on',
     'on',
 
@@ -99,13 +99,13 @@ const group5Schedule = [
     'on',
     'on',
 
+    'off',
     'off',
     'off',
   ],
   // Thursday
   [
     'off',
-    'off',
     'possible',
     'possible',
     'possible',
@@ -129,11 +129,11 @@ const group5Schedule = [
     'possible',
     'possible',
     'possible',
+    'on',
     'on',
   ],
   //Friday
   [
-    'on',
     'off',
     'off',
     'off',
@@ -158,12 +158,12 @@ const group5Schedule = [
     'off',
     'off',
     'off',
+    'possible',
     'possible',
   ],
   // Saturday
   [
     'possible',
-    'possible',
     'on',
     'on',
 
@@ -187,6 +187,7 @@ const group5Schedule = [
     'on',
     'on',
 
+    'off',
     'off',
     'off',
   ],
@@ -194,6 +195,12 @@ const group5Schedule = [
   [
     'off',
     'possible',
+    'on',
+    'on',
+
+    'off',
+    'off',
+    'off',
     'possible',
     'on',
     'on',
@@ -201,8 +208,6 @@ const group5Schedule = [
     'off',
     'off',
     'off',
-    'off',
-    'possible',
     'possible',
     'on',
     'on',
@@ -210,9 +215,6 @@ const group5Schedule = [
     'off',
     'off',
     'off',
-    'off',
-    'possible',
-    'possible',
     'possible',
     'on',
     'on',
@@ -229,15 +231,6 @@ const group6Schedule = [
   // Monday
   [
     'off',
-    'possible',
-    'possible',
-    'possible',
-    'on',
-    'on',
-
-    'off',
-    'off',
-    'off',
     'off',
     'possible',
     'possible',
@@ -253,10 +246,20 @@ const group6Schedule = [
     'possible',
     'possible',
     'on',
+    'on',
+
+    'off',
+    'off',
+    'off',
+    'off',
+    'possible',
+    'possible',
+    'possible',
     'on',
   ],
   // Tuesday
   [
+    'on',
     'off',
     'off',
     'off',
@@ -281,21 +284,11 @@ const group6Schedule = [
     'off',
     'off',
     'off',
-    'possible',
     'possible',
   ],
   // Wednesday
   [
     'possible',
-    'on',
-    'on',
-
-    'off',
-    'off',
-    'off',
-    'off',
-    'possible',
-    'possible',
     'possible',
     'on',
     'on',
@@ -311,21 +304,21 @@ const group6Schedule = [
     'on',
 
     'off',
+    'off',
+    'off',
+    'off',
+    'possible',
+    'possible',
+    'possible',
+    'on',
+    'on',
+
     'off',
     'off',
   ],
   // Thursday
   [
     'off',
-    'possible',
-    'possible',
-    'possible',
-    'on',
-    'on',
-
-    'off',
-    'off',
-    'off',
     'off',
     'possible',
     'possible',
@@ -341,10 +334,20 @@ const group6Schedule = [
     'possible',
     'possible',
     'on',
+    'on',
+
+    'off',
+    'off',
+    'off',
+    'off',
+    'possible',
+    'possible',
+    'possible',
     'on',
   ],
   //Friday
   [
+    'on',
     'off',
     'off',
     'off',
@@ -369,21 +372,11 @@ const group6Schedule = [
     'off',
     'off',
     'off',
-    'possible',
     'possible',
   ],
   // Saturday
   [
     'possible',
-    'on',
-    'on',
-
-    'off',
-    'off',
-    'off',
-    'off',
-    'possible',
-    'possible',
     'possible',
     'on',
     'on',
@@ -399,6 +392,15 @@ const group6Schedule = [
     'on',
 
     'off',
+    'off',
+    'off',
+    'off',
+    'possible',
+    'possible',
+    'possible',
+    'on',
+    'on',
+
     'off',
     'off',
   ],
@@ -406,12 +408,6 @@ const group6Schedule = [
   [
     'off',
     'possible',
-    'on',
-    'on',
-
-    'off',
-    'off',
-    'off',
     'possible',
     'on',
     'on',
@@ -419,6 +415,8 @@ const group6Schedule = [
     'off',
     'off',
     'off',
+    'off',
+    'possible',
     'possible',
     'on',
     'on',
@@ -426,6 +424,9 @@ const group6Schedule = [
     'off',
     'off',
     'off',
+    'off',
+    'possible',
+    'possible',
     'possible',
     'on',
     'on',
