@@ -13,7 +13,7 @@ const shutdownsBot = new TelegramBot(token, { polling: true });
 /**
  * @type {('possible' | 'off' | 'on' )[][]}
  */
-const schedule = [
+const group5Schedule = [
   // Monday
   [
     'off',
@@ -221,6 +221,221 @@ const schedule = [
     'off',
   ],
 ];
+
+/**
+ * @type {('possible' | 'off' | 'on' )[][]}
+ */
+const group6Schedule = [
+  // Monday
+  [
+    'off',
+    'possible',
+    'possible',
+    'possible',
+    'on',
+    'on',
+
+    'off',
+    'off',
+    'off',
+    'off',
+    'possible',
+    'possible',
+    'possible',
+    'on',
+    'on',
+
+    'off',
+    'off',
+    'off',
+    'off',
+    'possible',
+    'possible',
+    'possible',
+    'on',
+    'on',
+  ],
+  // Tuesday
+  [
+    'off',
+    'off',
+    'off',
+    'off',
+    'possible',
+    'possible',
+    'possible',
+    'on',
+    'on',
+
+    'off',
+    'off',
+    'off',
+    'off',
+    'possible',
+    'possible',
+    'possible',
+    'on',
+    'on',
+
+    'off',
+    'off',
+    'off',
+    'off',
+    'possible',
+    'possible',
+  ],
+  // Wednesday
+  [
+    'possible',
+    'on',
+    'on',
+
+    'off',
+    'off',
+    'off',
+    'off',
+    'possible',
+    'possible',
+    'possible',
+    'on',
+    'on',
+
+    'off',
+    'off',
+    'off',
+    'off',
+    'possible',
+    'possible',
+    'possible',
+    'on',
+    'on',
+
+    'off',
+    'off',
+    'off',
+  ],
+  // Thursday
+  [
+    'off',
+    'possible',
+    'possible',
+    'possible',
+    'on',
+    'on',
+
+    'off',
+    'off',
+    'off',
+    'off',
+    'possible',
+    'possible',
+    'possible',
+    'on',
+    'on',
+
+    'off',
+    'off',
+    'off',
+    'off',
+    'possible',
+    'possible',
+    'possible',
+    'on',
+    'on',
+  ],
+  //Friday
+  [
+    'off',
+    'off',
+    'off',
+    'off',
+    'possible',
+    'possible',
+    'possible',
+    'on',
+    'on',
+
+    'off',
+    'off',
+    'off',
+    'off',
+    'possible',
+    'possible',
+    'possible',
+    'on',
+    'on',
+
+    'off',
+    'off',
+    'off',
+    'off',
+    'possible',
+    'possible',
+  ],
+  // Saturday
+  [
+    'possible',
+    'on',
+    'on',
+
+    'off',
+    'off',
+    'off',
+    'off',
+    'possible',
+    'possible',
+    'possible',
+    'on',
+    'on',
+
+    'off',
+    'off',
+    'off',
+    'off',
+    'possible',
+    'possible',
+    'possible',
+    'on',
+    'on',
+
+    'off',
+    'off',
+    'off',
+  ],
+  // Sunday
+  [
+    'off',
+    'possible',
+    'on',
+    'on',
+
+    'off',
+    'off',
+    'off',
+    'possible',
+    'on',
+    'on',
+
+    'off',
+    'off',
+    'off',
+    'possible',
+    'on',
+    'on',
+
+    'off',
+    'off',
+    'off',
+    'possible',
+    'on',
+    'on',
+
+    'off',
+    'off',
+  ],
+];
+
+const schedule = group5Schedule;
 
 export default () => {
   shutdownsBot.onText(/\/start/, msg => {
